@@ -4,10 +4,11 @@ Version: 0.1.0
 Summary: Real-Time Mechanistic Interpretability & Neuro-Symbolic Delusion Interceptor for Compound AI Systems
 Author: AgentProbe Contributors
 Requires-Python: >=3.11
-Requires-Dist: torch>=2.4.0
-Requires-Dist: transformers>=4.44.0
-Requires-Dist: z3-solver<5.0.0,>=4.13.0
 Requires-Dist: pydantic>=2.8.0
+Provides-Extra: ml
+Requires-Dist: torch>=2.4.0; extra == "ml"
+Requires-Dist: transformers>=4.44.0; extra == "ml"
+Requires-Dist: z3-solver>=5.0.0.0; extra == "ml"
 Provides-Extra: dev
 Requires-Dist: pytest>=8.0.0; extra == "dev"
 Requires-Dist: pytest-cov; extra == "dev"

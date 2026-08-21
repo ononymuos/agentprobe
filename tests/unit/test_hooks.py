@@ -1,8 +1,6 @@
 import pytest
-import pytest
 torch = pytest.importorskip("torch")
-import pytest
-torch = pytest.importorskip("torch").nn as nn
+nn = pytest.importorskip("torch.nn")
 from agentprobe.core.hooks import ModelHookManager
 
 class DummyModel(nn.Module):

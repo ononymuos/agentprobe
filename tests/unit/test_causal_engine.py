@@ -1,5 +1,4 @@
 import pytest
-import pytest
 torch = pytest.importorskip("torch")
 from agentprobe.core.causal_engine import CausalAttributionEngine
 
@@ -30,5 +29,4 @@ def test_causal_engine_orthogonal():
         obs_span=(0, 5),
         action_span=(5, 10)
     )
-    # orthogonal so score should be low (~0.5 because of cosine mapping to [0,1])
     assert score <= 0.6
