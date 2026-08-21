@@ -5,12 +5,13 @@ The central execution interceptor that combines causal neural grounding
 with SMT formal verification in agent execution loops.
 """
 
+import typing
 from typing import Any
 
 from agentprobe.core.causal_engine import CausalAttributionEngine
 from agentprobe.core.hooks import ModelHookManager
 from agentprobe.verifier.smt_compiler import SMTInvariantVerifier
-import typing
+
 
 class DelusionInterceptException(Exception):
     def __init__(self, message: str, remediation_prompt: str):

@@ -23,12 +23,12 @@ def test_hooks_attachment():
     manager = ModelHookManager(model, target_layers=[0, 1, 2])
 
     x = torch.randn(1, 10, 16)
-    out = model(x)
+    model(x)
 
     assert len(manager.buffer.residual_stream) == 3
     for i in range(3):
         assert torch.allclose(manager.buffer.residual_stream[i], x)
 
     manager.remove()
-    out2 = model(x)
+    model(x)
     assert len(manager.buffer.residual_stream) == 0

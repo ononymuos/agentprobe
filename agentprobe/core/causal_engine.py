@@ -32,7 +32,7 @@ class CausalAttributionEngine:
             return 0.0
 
         layer_scores = []
-        for layer_idx, hidden_state in residual_stream.items():
+        for _layer_idx, hidden_state in residual_stream.items():
             # hidden_state: [batch_size, seq_len, d_model]
             obs_vec = hidden_state[:, obs_start:obs_end, :].mean(dim=1)  # [B, D]
             act_vec = hidden_state[:, act_start:act_end, :].mean(dim=1)  # [B, D]

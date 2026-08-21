@@ -1,5 +1,7 @@
 # AgentProbe
 
+[![CI](https://github.com/ononymuos/agentprobe/actions/workflows/ci.yml/badge.svg)](https://github.com/ononymuos/agentprobe/actions)
+
 Real-Time Mechanistic Interpretability & Neuro-Symbolic Delusion Interceptor for Compound AI Systems.
 
 ## Overview
