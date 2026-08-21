@@ -6,8 +6,10 @@ residual stream activations and attention maps without breaking torch.compile.
 """
 
 import typing
+
 import torch
 import torch.nn as nn
+
 
 class ActivationBuffer:
     def __init__(self) -> None:
