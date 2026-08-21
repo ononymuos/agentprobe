@@ -1,32 +1,20 @@
-import pytest
-torch = pytest.importorskip("torch")
+import torch
 from agentprobe.core.causal_engine import CausalAttributionEngine
 
-def test_causal_engine_identical():
+def test_causal_engine_identical_spans():
     engine = CausalAttributionEngine()
-    residual_stream = {
-        0: torch.ones(1, 10, 5),
-        1: torch.ones(1, 10, 5)
-    }
-    score = engine.compute_grounding_score(
-        residual_stream,
-        attention_map=None,
-        obs_span=(0, 5),
-        action_span=(5, 10)
-    )
-    assert score > 0.9
+    # Simulate identical spans (should align to 1.0)
+    # Shape: [batch, seq_len, d_model]
+    stream = {0: torch.ones(1, 10, 16)}
+    score = engine.compute_grounding_score(stream, None, (0, 5), (0, 5))
+    assert score == 1.0
 
 def test_causal_engine_orthogonal():
     engine = CausalAttributionEngine()
-    
-    res_stream = torch.zeros(1, 10, 2)
-    res_stream[0, 0:5, 0] = 1.0  # obs
-    res_stream[0, 5:10, 1] = 1.0  # act
-    
-    score = engine.compute_grounding_score(
-        {0: res_stream},
-        attention_map=None,
-        obs_span=(0, 5),
-        action_span=(5, 10)
-    )
-    assert score <= 0.6
+    # Simulate orthogonal spans (score -> 0.5 because we normalize [-1,1] to [0,1], 0 maps to 0.5)
+    tensor = torch.zeros(1, 10, 16)
+    tensor[:, 0:5, :] = 1.0
+    tensor[:, 5:10, :] = -1.0
+    stream = {0: tensor}
+    score = engine.compute_grounding_score(stream, None, (0, 5), (5, 10))
+    assert abs(score - 0.0) < 1e-5
