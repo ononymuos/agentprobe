@@ -7,8 +7,6 @@ Low-overhead PyTorch forward pre-hooks for extracting layer-wise
 residual stream activations and attention maps without breaking torch.compile.
 """
 
-import torch
-import torch.nn as nn
 
 
 class ActivationBuffer:
