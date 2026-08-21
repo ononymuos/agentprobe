@@ -1,5 +1,3 @@
-import typing
-
 """
 agentprobe.core.hooks
 ~~~~~~~~~~~~~~~~~~~~~
@@ -7,7 +5,9 @@ Low-overhead PyTorch forward pre-hooks for extracting layer-wise
 residual stream activations and attention maps without breaking torch.compile.
 """
 
-
+import typing
+import torch
+import torch.nn as nn
 
 class ActivationBuffer:
     def __init__(self) -> None:
@@ -17,7 +17,6 @@ class ActivationBuffer:
     def clear(self) -> None:
         self.residual_stream.clear()
         self.attention_maps.clear()
-
 
 class ModelHookManager:
     def __init__(self, model: nn.Module, target_layers: list[int] | None = None):

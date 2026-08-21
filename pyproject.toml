@@ -22,6 +22,9 @@ pytest-cov = "*"
 ruff = "*"
 mypy = "*"
 
+[tool.ruff]
+line-length = 165
+
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM"]
 
