@@ -1,0 +1,10 @@
+torch>=2.4.0
+transformers>=4.44.0
+z3-solver<5.0.0,>=4.13.0
+pydantic>=2.8.0
+
+[dev]
+pytest>=8.0.0
+pytest-cov
+ruff
+mypy
