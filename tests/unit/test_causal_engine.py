@@ -1,5 +1,6 @@
 import pytest
-import torch
+import pytest
+torch = pytest.importorskip("torch")
 from agentprobe.core.causal_engine import CausalAttributionEngine
 
 def test_causal_engine_identical():

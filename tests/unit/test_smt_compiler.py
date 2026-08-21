@@ -1,4 +1,5 @@
 import pytest
+z3 = pytest.importorskip("z3")
 from agentprobe.verifier.smt_compiler import SMTInvariantVerifier
 
 def test_smt_compiler_valid():
