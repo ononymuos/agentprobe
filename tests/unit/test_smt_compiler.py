@@ -1,5 +1,5 @@
-import pytest
 from agentprobe.verifier.smt_compiler import SMTInvariantVerifier
+
 
 def test_smt_compiler_safe():
     verifier = SMTInvariantVerifier()

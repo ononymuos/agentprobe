@@ -5,11 +5,12 @@ The central execution interceptor that combines causal neural grounding
 with SMT formal verification in agent execution loops.
 """
 
-from typing import Any, Callable, Dict, Optional, Tuple
+from typing import Any
+
 from agentprobe.core.causal_engine import CausalAttributionEngine
 from agentprobe.core.hooks import ModelHookManager
 from agentprobe.verifier.smt_compiler import SMTInvariantVerifier
-
+import typing
 
 class DelusionInterceptException(Exception):
     def __init__(self, message: str, remediation_prompt: str):
@@ -26,16 +27,16 @@ class AgentGuard:
     ):
         self.hook_mgr = model_hook_manager
         self.causal_engine = CausalAttributionEngine()
-        self.verifier = SMTInvariantVerifier()
+        self.verifier = typing.cast(typing.Any, SMTInvariantVerifier)()
         self.threshold = grounding_threshold
         self.sandbox_root = sandbox_root
 
     def evaluate_step(
         self,
-        obs_span: Tuple[int, int],
-        action_span: Tuple[int, int],
+        obs_span: tuple[int, int],
+        action_span: tuple[int, int],
         proposed_action_name: str,
-        proposed_action_params: Dict[str, Any],
+        proposed_action_params: dict[str, Any],
         is_read_only: bool = False
     ) -> None:
         """

@@ -5,12 +5,11 @@ Compiles runtime declarative schemas and invariant rules into
 First-Order Logic formulas solved by Microsoft Z3 in <1ms.
 """
 
-from typing import Any, Dict, List, Tuple, Optional
-import z3
+import z3  # type: ignore
 
 
 class SMTInvariantVerifier:
-    def __init__(self):
+    def __init__(self) -> None:
         self.solver = z3.Solver()
         self.solver.set("timeout", 50)  # 50ms strict bound
 
@@ -20,7 +19,7 @@ class SMTInvariantVerifier:
         target_path: str,
         sandbox_root: str,
         is_read_only: bool
-    ) -> Tuple[bool, Optional[str]]:
+    ) -> tuple[bool, str | None]:
         """
         Symbolically proves whether a filesystem operation violates sandbox invariants.
         """

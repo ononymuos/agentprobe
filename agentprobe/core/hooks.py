@@ -1,3 +1,5 @@
+import typing
+
 """
 agentprobe.core.hooks
 ~~~~~~~~~~~~~~~~~~~~~
@@ -5,15 +7,14 @@ Low-overhead PyTorch forward pre-hooks for extracting layer-wise
 residual stream activations and attention maps without breaking torch.compile.
 """
 
-from typing import Dict, List, Optional, Tuple
 import torch
 import torch.nn as nn
 
 
 class ActivationBuffer:
-    def __init__(self):
-        self.residual_stream: Dict[int, torch.Tensor] = {}
-        self.attention_maps: Dict[int, torch.Tensor] = {}
+    def __init__(self) -> None:
+        self.residual_stream: dict[int, torch.Tensor] = {}
+        self.attention_maps: dict[int, torch.Tensor] = {}
 
     def clear(self) -> None:
         self.residual_stream.clear()
@@ -21,11 +22,11 @@ class ActivationBuffer:
 
 
 class ModelHookManager:
-    def __init__(self, model: nn.Module, target_layers: Optional[List[int]] = None):
+    def __init__(self, model: nn.Module, target_layers: list[int] | None = None):
         self.model = model
         self.buffer = ActivationBuffer()
-        self.handles: List[torch.utils.hooks.RemovableHandle] = []
-        
+        self.handles: list[torch.utils.hooks.RemovableHandle] = []
+
         # Auto-detect transformer layer structure (Llama, Mistral, Qwen, Gemma)
         self.layers = self._resolve_layers()
         self.target_layers = target_layers or [
@@ -36,12 +37,12 @@ class ModelHookManager:
         self._register_hooks()
 
     def _resolve_layers(self) -> nn.ModuleList:
-        for attr in ["model.layers", "transformer.h", "model.decoder.layers"]:
+        for attr in ["layers", "model.layers", "transformer.h", "model.decoder.layers"]:
             try:
                 curr = self.model
                 for part in attr.split("."):
                     curr = getattr(curr, part)
-                return curr
+                return typing.cast(nn.ModuleList, curr)
             except AttributeError:
                 continue
         raise ValueError("Unsupported model architecture. Could not resolve transformer layers.")
@@ -49,9 +50,9 @@ class ModelHookManager:
     def _register_hooks(self) -> None:
         for idx in self.target_layers:
             layer = self.layers[idx]
-            
-            def make_hook(layer_idx: int):
-                def hook_fn(module, input, output):
+
+            def make_hook(layer_idx: int) -> typing.Callable[..., None]:
+                def hook_fn(module: nn.Module, input: typing.Any, output: typing.Any) -> None:
                     # Handle tuple outputs (hidden_states, attns)
                     if isinstance(output, tuple):
                         hidden = output[0]

@@ -1,5 +1,7 @@
 import torch
+
 from agentprobe.core.causal_engine import CausalAttributionEngine
+
 
 def test_causal_engine_identical_spans():
     engine = CausalAttributionEngine()

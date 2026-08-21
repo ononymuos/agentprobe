@@ -6,7 +6,7 @@ subspace projection angles, and attention entropy over agent spans.
 """
 
 import math
-from typing import Dict, Tuple, Optional
+
 import torch
 
 
@@ -17,17 +17,17 @@ class CausalAttributionEngine:
     @torch.inference_mode()
     def compute_grounding_score(
         self,
-        residual_stream: Dict[int, torch.Tensor],
-        attention_map: Optional[torch.Tensor],
-        obs_span: Tuple[int, int],
-        action_span: Tuple[int, int]
+        residual_stream: dict[int, torch.Tensor],
+        attention_map: torch.Tensor | None,
+        obs_span: tuple[int, int],
+        action_span: tuple[int, int]
     ) -> float:
         """
         Computes the Causal Grounding Score between observation tokens and action tokens.
         """
         obs_start, obs_end = obs_span
         act_start, act_end = action_span
-        
+
         if obs_start >= obs_end or act_start >= act_end:
             return 0.0
 
@@ -53,7 +53,7 @@ class CausalAttributionEngine:
             act_to_obs_attn = attention_map[:, :, act_start:act_end, obs_start:obs_end]
             mean_attn = act_to_obs_attn.mean(dim=(0, 1, 2))  # [obs_len]
             probs = mean_attn / (mean_attn.sum() + self.eps)
-            
+
             entropy = -torch.sum(probs * torch.log(probs + self.eps)).item()
             max_entropy = math.log(max(1, obs_end - obs_start))
             normalized_entropy = entropy / max(self.eps, max_entropy) if max_entropy > 0 else 0.0
